@@ -12,7 +12,9 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 
 from app.db.base import Base
-from app.db.models import user
+from app.models import user
+from app.models.task import Task
+
 
 
 # this is the Alembic Config object, which provides

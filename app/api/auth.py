@@ -2,12 +2,11 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from app.utils.security import verify_password, create_access_token
-from app.schemas.user import UserCreate, UserOut
+from app.schemas.user import UserCreate, UserOut, UserCreate, User
 from app.core.security import get_password_hash
 from app.schemas.token import Token
-from app.schemas import user as schemas
 from app.db import session as db_session
-from app.db.models.user import User
+from app.models.user import User
 from app.utils import security
 from app.crud.user import get_user_by_email
 from app.db.session import get_db
@@ -41,8 +40,8 @@ def read_users_me(token: str = Depends(oauth2_scheme), db: Session = Depends(db_
     return user
 
 
-@router.post("/signup", response_model=schemas.User)
-def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
+@router.post("/signup", response_model=UserOut)
+def create_user(user: UserCreate, db: Session = Depends(get_db)):
     db_user = db.query(User).filter(User.email == user.email).first()
     if db_user:
         raise HTTPException(status_code=400, detail="Email already registered")
